@@ -18,5 +18,9 @@
   "license": "ISC",
   "devDependencies": {
     "soap": "0.23.0"
-  }
+  },
+  "repository": {
+  "type" : "git",
+  "url" : "https://github.com/cedricrey/A3C.git"
+}
 }
