@@ -17,7 +17,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "soap": "0.23.0"
+    "npm/soap": "0.23.0"
   },
   "repository": {
   "type" : "git",
