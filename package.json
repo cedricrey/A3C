@@ -1,0 +1,22 @@
+{
+  "author": "Cédric Rey",
+  "name": "a3c",
+  "version": "1.0.0",
+  "description": "Adobe Campaign Connector : tools to connect to Adobe Campaign Classic",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Adobe",
+    "Campaign",
+    "Neolane"
+  ],
+  "directories": {
+    "wsdl": "./wsdl"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "soap": "0.23.0"
+  }
+}
