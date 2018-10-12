@@ -7,8 +7,8 @@ var soap = require('soap');
     this.a3cLogin = options.a3cLogin || {};
     this.endpoint = this.a3cLogin.endpoint || "";
     this.wsdl = options.wsdl || xtkQueryDefWSDL;
-    this.actionPromise = soap.createClientAsync( this.wsdl, {endpoint : this.endpoint} );
-    this.actionPromise.then( function( client ){
+    this.clientPromise = soap.createClientAsync( this.wsdl, {endpoint : this.endpoint} );
+    this.clientPromise.then( function( client ){
         this.client = client;
         this.client.addHttpHeader('X-Security-Token', this.a3cLogin.securityToken);
         this.client.addHttpHeader('cookie',  "__sessiontoken=" + this.a3cLogin.sessionToken);

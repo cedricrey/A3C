@@ -19,7 +19,7 @@ class A3CSession extends A3CNLObject {
               this.executeQueryResolve( result );
       }.bind(this)
 
-    this.actionPromise.then(
+    this.clientPromise.then(
     function( contentToSend ){
       this.client.Write({
         sessiontoken : this.a3cLogin.sessionToken,

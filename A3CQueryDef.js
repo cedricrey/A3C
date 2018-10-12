@@ -21,7 +21,7 @@ class A3CQueryDef extends A3CNLObject {
         }
     }.bind( this );
 
-    this.actionPromise.then(
+    this.clientPromise.then(
     function( query ){
       this.client.ExecuteQuery({
         sessiontoken : this.a3cLogin.sessionToken,
