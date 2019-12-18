@@ -1,4 +1,5 @@
 var soap = require('soap'),
+    JXON = require('jxon'),
     A3CNLObject = require('./A3CNLObject').A3CNLObject;
     xtkQueryDefWSDL = require.resolve('./wsdl/wsdl_xtkquerydef.xml');
 
@@ -17,7 +18,15 @@ class A3CQueryDef extends A3CNLObject {
       }
       else
         {
-          this.executeQueryResolve( result.pdomOutput );
+          if( this.options.outputFormat && this.options.outputFormat.toString().toUpperCase() == "XML")
+            {
+              var jxonVersion = JXON.stringToJs(raw);
+              jxonVersion = jxonVersion['SOAP-ENV:Envelope']['SOAP-ENV:Body'].ExecuteQueryResponse.pdomOutput;
+              console.log('jxonVersion ? ', jxonVersion);
+              this.executeQueryResolve( JXON.jsToXml({result : jxonVersion}) );
+            }
+          else
+            this.executeQueryResolve( result.pdomOutput );
         }
     }.bind( this );
 

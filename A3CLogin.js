@@ -7,20 +7,21 @@ function A3CLogin( options ){
   this.user = options.user || "";
   this.password = options.password || "";
   this.endpoint = this.server + "/nl/jsp/soaprouter.jsp";
+  //Just to avoid multiple login request
+  this.loginRequested = false;
   this.loginPromise = new Promise( (resolve, reject ) => {
     this.resolveLoginPromise = resolve;
     this.rejectLoginPromise = reject;
   });
+  this.writePromise = soap.createClientAsync( xtkSessionWSDL, {endpoint : this.endpoint} );
 }
 
-A3CLogin.prototype.login = function( callBack ){  
-  var onError = function( err ){
-    console.log( err );
-  };
-
+A3CLogin.prototype.login = function(){  
+  //Just to avoid multiple login request
+  this.loginRequested = true;
   if( ! this.writePromise )
     {
-      this.writePromise = soap.createClientAsync( xtkSessionWSDL, {endpoint : this.endpoint} );
+      this.writePromise = soap.createClientAsync( xtkSessionWSDL, {endpoint : this.endpoint} );      
     }
   this.writePromise.then(
      function(client){
@@ -29,17 +30,17 @@ A3CLogin.prototype.login = function( callBack ){
          strLogin :  this.user ,
          strPassword : this.password ,
          elemParameters : ""}, 
-         this.onTokenLoaded.bind(this, callBack));
+         this.onTokenLoaded.bind(this));
       }.bind( this )
     );
+  return this.loginPromise;
 };
-A3CLogin.prototype.onTokenLoaded = function(callBack, err, result, raw, soapHeader){
+A3CLogin.prototype.onTokenLoaded = function( err, result, raw, soapHeader){
     
     if(err)
       {
       console.log("Error..." + err );
-      this.rejectLoginPromise();
-      reject();
+      this.rejectLoginPromise( err );
       return
       }
     try{
@@ -50,9 +51,7 @@ A3CLogin.prototype.onTokenLoaded = function(callBack, err, result, raw, soapHead
       this.securityToken = "";
     }
     this.sessionToken = result.pstrSessionToken.$value;
-    if(typeof callBack == "function")
-      callBack();
-    this.resolveLoginPromise();
+    this.resolveLoginPromise( this.getTokens() );
 };
 A3CLogin.prototype.getTokens = function(){
   return {
@@ -64,5 +63,8 @@ A3CLogin.prototype.getTokens = function(){
 A3CLogin.prototype.getLoginPromise = function(){
   return this.loginPromise;
 }
-
+//Just to avoid multiple login request
+A3CLogin.prototype.isLoginRequested = function(){
+  return this.loginRequested;
+}
 exports.A3CLogin = A3CLogin;
